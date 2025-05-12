@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: sans-serif;
-      max-width: 500px;
+      max-width: 600px;
       margin: 40px auto;
       background: #f9f9f9;
       padding: 30px;
@@ -31,6 +31,17 @@
       padding: 15px;
       border-radius: 5px;
     }
+    .preview {
+      margin-top: 20px;
+      text-align: center;
+    }
+    .preview img {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
@@ -47,9 +58,9 @@
 
   <label for="material">Material:</label>
   <select id="material">
-    <option value="0.002">MDF</option>
-    <option value="0.0025">PVC</option>
-    <option value="0.0035">Natural Wood</option>
+    <option value="0.002" data-image="https://via.placeholder.com/300x150.png?text=MDF">MDF</option>
+    <option value="0.0025" data-image="https://via.placeholder.com/300x150.png?text=PVC">PVC</option>
+    <option value="0.0035" data-image="https://via.placeholder.com/300x150.png?text=Wood">Natural Wood</option>
   </select>
 
   <label for="door">Door Type:</label>
@@ -64,15 +75,24 @@
     Estimated production time: -
   </div>
 
+  <div class="preview">
+    <strong>Material Preview:</strong><br>
+    <img id="material-preview" src="https://via.placeholder.com/300x150.png?text=MDF" alt="Material Preview">
+  </div>
+
   <script>
     const inputs = document.querySelectorAll('input, select');
+    const materialSelect = document.getElementById('material');
+    const materialPreview = document.getElementById('material-preview');
+
     inputs.forEach(input => input.addEventListener('input', calculate));
+    materialSelect.addEventListener('change', updateImage);
 
     function calculate() {
       const length = parseFloat(document.getElementById('length').value) || 0;
       const width = parseFloat(document.getElementById('width').value) || 0;
       const height = parseFloat(document.getElementById('height').value) || 0;
-      const material = parseFloat(document.getElementById('material').value);
+      const material = parseFloat(materialSelect.value);
       const door = parseFloat(document.getElementById('door').value);
 
       const volume = length * width * height;
@@ -87,6 +107,15 @@
         <strong>Estimated production time:</strong> ${days}
       `;
     }
+
+    function updateImage() {
+      const selectedOption = materialSelect.options[materialSelect.selectedIndex];
+      const imageUrl = selectedOption.getAttribute('data-image');
+      materialPreview.src = imageUrl;
+    }
+
+    // Initialize default image
+    updateImage();
   </script>
 </body>
 </html>
